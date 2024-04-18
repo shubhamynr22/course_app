@@ -19,15 +19,15 @@ router.post('/signup', async (req, res) => {
 
 router.post('/courses', adminMiddleware, async (req, res) => {
   const { title, description, price, imageLink } = req.body;
-  {
-    await Course.create({
-      title: title,
-      description: description,
-      price: parseInt(price),
-      imageLink: imageLink
-    });
-  }
-  res.status(200).json({ message: 'Course created successfully', courseId: 'Enter code here' });
+
+  const newCourse = await Course.create({
+    title: title,
+    description: description,
+    price: parseInt(price),
+    imageLink: imageLink
+  });
+
+  res.status(200).json({ message: 'Course created successfully', courseId: newCourse._id });
 });
 
 router.get('/courses', adminMiddleware, async (req, res) => {
