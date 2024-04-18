@@ -1,18 +1,19 @@
+const { Admin } = require('../db/index');
 // Middleware for handling auth
-function adminMiddleware(req, res, next) {
+async function adminMiddleware(req, res, next) {
   try {
     const { username, password } = req.headers;
-    if (
-      !Admin.findOne({
-        username: username,
-        password: password
-      })
-    ) {
+    const isValid = await Admin.findOne({
+      username: username,
+      password: password
+    });
+    if (!isValid) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
     next();
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.log(error);
+    res.status(500).json({ error: `Internal server error` });
   }
 }
 
